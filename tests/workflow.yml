@@ -1,0 +1,49 @@
+version: "1.1"
+name: My API Tests
+env:
+  host: jsonplaceholder.typicode.com
+tests:
+  example:
+    steps:
+      - name: Status 200 OK
+        http:
+          url: https://{{env.host}}/todos/1
+          method: GET
+          check:
+            status: /^200/
+      - name: JSON Schema Check
+        http:
+          url: https://{{env.host}}/posts/1
+          method: GET
+          check:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                id:
+                  type: integer
+                title:
+                  type: string
+                body:
+                  type: string
+              required:
+                - userId
+                - id
+                - title
+                - body
+      - name: Post JSON and Performance Check
+        http:
+          url: https://{{env.host}}/posts
+          method: POST
+          body:
+            userId: 1
+            title: "qui est esse"
+            body: "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+          check:
+            status: /^201/
+            performance:
+              firstByte:
+                - lte: 500
+              total:
+                - lte: 1000
