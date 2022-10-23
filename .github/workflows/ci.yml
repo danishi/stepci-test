@@ -11,4 +11,4 @@ jobs:
       - name: Step CI Action
         uses: stepci/stepci@main
         with:
-          workflow: "workflow.yml"
+          workflow: "tests/workflow.yml"
